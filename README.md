@@ -1,7 +1,7 @@
 # electron-color-picker
 
 [![i:npm]][l:npm]
-[![i:code-style]][l:code-style]
+[![i:lint]][l:lint]
 
 Pick color from Desktop, suitable for use with Electron.
 
@@ -24,6 +24,6 @@ const getColor = async () => {
 
 [i:npm]: https://img.shields.io/npm/v/electron-color-picker.svg
 [l:npm]: https://www.npmjs.com/package/electron-color-picker
-[i:code-style]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
-[l:code-style]: https://standardjs.com
+[i:lint]: https://img.shields.io/badge/code_style-standard-brightgreen.svg
+[l:lint]: https://standardjs.com
 [l:npm:desktop-screenshot]: https://img.shields.io/npm/v/desktop-screenshot.svg

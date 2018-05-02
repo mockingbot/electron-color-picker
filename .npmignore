@@ -1,7 +1,0 @@
-# source files
-**/*-gitignore/**
-**/*-gitignore*
-/.*
-/*.tgz
-/*.lock
-/source

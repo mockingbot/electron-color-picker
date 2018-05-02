@@ -5,7 +5,7 @@ module.exports = {
   presets: [ [ '@babel/env', { targets: { node: 8 } } ] ],
   plugins: [
     [ '@babel/proposal-class-properties' ],
-    [ 'module-resolver', { root: [ './' ] } ],
+    [ 'module-resolver', { root: [ './' ], alias: { 'dr-js/module/(.+)': 'dr-js/library/' } } ],
     [ 'minify-replace', { replacements: [ { identifierName: '__DEV__', replacement: { type: 'booleanLiteral', value: isDev } } ] } ]
   ],
   comments: false

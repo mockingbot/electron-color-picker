@@ -1,15 +1,17 @@
-import nodeModuleFs from 'fs'
-import nodeModuleUrl from 'url'
-import nodeModulePath from 'path'
-import nodeModuleChildProcess from 'child_process'
+import { readFileSync, unlinkSync } from 'fs'
+import { format as formatUrl } from 'url'
+import { join as joinPath } from 'path'
+import { exec } from 'child_process'
 import { promisify } from 'util'
+
 import { BrowserWindow, app, screen } from 'electron'
+
 import { runLinuxSCROT } from './linux-scrot'
 
-const execAsync = promisify(nodeModuleChildProcess.exec)
+const execAsync = promisify(exec)
 
-const formatFileUrl = (...args) => nodeModuleUrl.format({
-  pathname: nodeModulePath.join(...args),
+const formatFileUrl = (...args) => formatUrl({
+  pathname: joinPath(...args),
   protocol: 'file',
   slashes: true
 })
@@ -22,14 +24,14 @@ const tryCreateScreenshotFile = async (tempOutputFile) => {
 
 // get screenshot
 const createDataUrlFromBuffer = (buffer, MIME) => `data:${MIME};base64,${buffer.toString('base64')}`
-const loadImageFileAsDataUrl = (imagePath, MIME = 'image/png') => createDataUrlFromBuffer(nodeModuleFs.readFileSync(imagePath), MIME)
+const loadImageFileAsDataUrl = (imagePath, MIME = 'image/png') => createDataUrlFromBuffer(readFileSync(imagePath), MIME)
 const getScreenshotDataUrl = async () => {
-  const tempOutputFile = nodeModulePath.join(app.getPath('temp'), 'temp-screenshot.png')
+  const tempOutputFile = joinPath(app.getPath('temp'), 'temp-screenshot.png')
 
   await tryCreateScreenshotFile(tempOutputFile)
 
   const imageDataUrl = await loadImageFileAsDataUrl(tempOutputFile)
-  nodeModuleFs.unlinkSync(tempOutputFile)
+  unlinkSync(tempOutputFile)
   return imageDataUrl
 }
 

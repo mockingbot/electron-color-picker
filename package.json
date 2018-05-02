@@ -1,6 +1,6 @@
 {
   "name": "electron-color-picker",
-  "version": "0.0.6-dev.0",
+  "version": "0.0.6-dev.1",
   "author": "mockingbot",
   "license": "MIT",
   "description": "Pick color from Desktop.",
@@ -11,13 +11,17 @@
   "repository": "github:mockingbot/electron-color-picker",
   "main": "library/index.js",
   "scripts": {
-    "build": "npm run build-clear && npm run build-library",
-    "build-clear": "dr-js --rm ./library",
-    "build-library": "babel ./source --out-dir ./library --copy-files",
-    "build-library-dev": "cross-env BABEL_ENV=dev npm run build-library --watch",
-    "prepack": "npm run build",
-    "publish-latest": "npm publish --userconfig ~/mockingbot.npmrc",
-    "publish-dev": "npm publish --tag dev --userconfig ~/mockingbot.npmrc"
+    "// script ======================": "",
+    "script-base": "babel-node ./script quiet",
+    "script-pack": "babel-node ./script quiet pack",
+    "script-publish": "babel-node ./script pack publish",
+    "script-publish-dev": "babel-node ./script pack publish-dev",
+    "script-generate-spec": "babel-node ./script/generateSpec",
+    "// build =======================": "",
+    "build-library": "babel ./source --out-dir ./output-gitignore/library --copy-files",
+    "build-library-dev": "cross-env BABEL_ENV=dev npm run build-library -- --watch",
+    "// =============================": "",
+    "prepack": "echo \"Error: pack with script-*\" && exit 1"
   },
   "engines": {
     "node": ">=8.8",
@@ -27,6 +31,7 @@
     "electron": "*"
   },
   "devDependencies": {
+    "dev-dep-tool": "0.2.2-dev.0",
     "dev-dep-babel": "0.2.2-dev.0",
     "dr-js": "0.15.0-dev.0"
   }

@@ -12,4 +12,3 @@ node_modules
 **/*-gitignore/**
 **/*-gitignore*
 /*.tgz
-/library

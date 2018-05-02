@@ -1,10 +1,10 @@
 const DEFAULT_RUN_COLOR_PICKER = () => { throw new Error(`[electron-color-picker] unsupported ${process.platform}-${process.arch}`) }
 const runColorPicker = (() => {
-  let runColorPicker
   try {
-    runColorPicker = require(`./${process.platform}`).runColorPicker
+    const { runColorPicker } = require(`./${process.platform}`)
+    return runColorPicker
   } catch (error) { __DEV__ && console.warn(`[electron-color-picker] error require('./${process.platform}')`, error) }
-  return runColorPicker || DEFAULT_RUN_COLOR_PICKER
+  return DEFAULT_RUN_COLOR_PICKER
 })()
 
 const REGEXP_COLOR_HEX_RGB = /#[A-F0-9]{6}/
