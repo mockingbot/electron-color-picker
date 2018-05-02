@@ -1,6 +1,6 @@
 {
   "name": "electron-color-picker",
-  "version": "0.0.5",
+  "version": "0.0.6-dev.0",
   "author": "mockingbot",
   "license": "MIT",
   "description": "Pick color from Desktop.",
@@ -8,33 +8,26 @@
     "Electron",
     "ColorPicker"
   ],
-  "homepage": "https://github.com/mockingbot/electron-color-picker#readme",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/mockingbot/electron-color-picker.git"
-  },
-  "bugs": {
-    "url": "https://github.com/mockingbot/electron-color-picker/issues"
-  },
+  "repository": "github:mockingbot/electron-color-picker",
   "main": "library/index.js",
   "scripts": {
     "build": "npm run build-clear && npm run build-library",
-    "build-clear": "dr-js -m rm -a ./library",
-    "build-library": "cross-env NODE_ENV=production BABEL_ENV=library babel ./source --out-dir ./library --copy-files",
-    "build-library-dev": "cross-env NODE_ENV=development BABEL_ENV=library-dev babel ./source --out-dir ./library --copy-files --watch",
+    "build-clear": "dr-js --rm ./library",
+    "build-library": "babel ./source --out-dir ./library --copy-files",
+    "build-library-dev": "cross-env BABEL_ENV=dev npm run build-library --watch",
     "prepack": "npm run build",
-    "publish-latest": "npm publish --userconfig ~/thatbean.npmrc",
-    "publish-dev": "npm publish --tag dev --userconfig ~/thatbean.npmrc"
+    "publish-latest": "npm publish --userconfig ~/mockingbot.npmrc",
+    "publish-dev": "npm publish --tag dev --userconfig ~/mockingbot.npmrc"
   },
   "engines": {
-    "node": ">=8.8.0",
-    "npm": ">=5.5.0"
-  },
-  "devDependencies": {
-    "dev-dep-babel": "^0.0.11",
-    "dr-js": "^0.10.0"
+    "node": ">=8.8",
+    "npm": ">=5"
   },
   "peerDependencies": {
     "electron": "*"
+  },
+  "devDependencies": {
+    "dev-dep-babel": "0.2.2-dev.0",
+    "dr-js": "0.15.0-dev.0"
   }
 }
