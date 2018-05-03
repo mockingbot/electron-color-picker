@@ -30,17 +30,17 @@ runMain(async (logger) => {
   execSync('npm run build-library', execOptionRoot)
 
   padLog(`minify output`)
+  const outputScriptList = (await getFileList(fromOutput('library'))).filter((path) => path.endsWith('.js') && !path.endsWith('.test.js'))
   await minifyFileListWithUglifyEs({
-    fileList: (await getFileList(fromOutput('library'))).filter((path) => path.endsWith('.js') && !path.endsWith('.test.js')),
     option: getUglifyESOption({ isDevelopment: false, isModule: false }),
+    fileList: outputScriptList,
     rootPath: PATH_OUTPUT,
     logger
   })
-
   log(`process output`)
   let sizeCodeReduceModule = 0
   const processBabel = wrapFileProcessor({ processor: fileProcessorBabel, logger })
-  for (const filePath of await getFileList(fromOutput('library'))) sizeCodeReduceModule += filePath.endsWith('.test.js') ? 0 : await processBabel(filePath)
+  for (const filePath of outputScriptList) sizeCodeReduceModule += await processBabel(filePath)
   log(`size reduce: ${formatBinary(sizeCodeReduceModule)}B`)
 
   const pathPackagePack = await packOutput({ fromRoot, fromOutput, logger })
