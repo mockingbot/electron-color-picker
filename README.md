@@ -17,7 +17,7 @@ import { clipboard } from 'electron'
 import { getColorHexRGB } from 'electron-color-picker'
 
 const getColor = async () => {
-  const color = await getColorHexRGB() // color may be `#0099ff` or `` (cancelled)
+  const color = await getColorHexRGB() // color may be `#0099ff` or `` (pick cancelled)
   console.log(`getColor: ${color}`)
   color && clipboard.writeText(color)
 }
