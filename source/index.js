@@ -11,7 +11,7 @@ const REGEXP_COLOR_HEX_RGB = /#[A-F0-9]{6}/
 const getColorHexRGB = async () => {
   const { possibleColorString } = await runColorPicker()
   const [ colorHex ] = REGEXP_COLOR_HEX_RGB.exec(possibleColorString.toUpperCase()) || []
-  if (!colorHex) throw new Error(`[electron-color-picker] failed to get hex color from: ${possibleColorString}`)
+  __DEV__ && console.log(`[electron-color-picker] get hex color: ${colorHex} from: ${possibleColorString}`)
   return colorHex
 }
 

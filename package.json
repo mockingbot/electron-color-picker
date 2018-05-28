@@ -1,9 +1,9 @@
 {
   "name": "electron-color-picker",
-  "version": "0.0.7",
+  "version": "0.1.0-dev.0",
   "author": "mockingbot",
   "license": "MIT",
-  "description": "Pick color from Desktop.",
+  "description": "Pick color from Desktop, suitable for use with Electron.",
   "keywords": [
     "Electron",
     "ColorPicker"

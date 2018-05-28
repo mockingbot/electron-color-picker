@@ -147,6 +147,10 @@ const pickColor = ({ sourceCanvas, pickerCanvasContext, pickerDiv, colorPre, ZOO
     sourceCanvas.removeEventListener('mousemove', debouncedUpdate)
     resolve(prevColorHex)
   })
+  document.addEventListener('keypress', (event) => {
+    if (event.code !== 'Escape') return
+    resolve('') // cancelled
+  })
 })
 
 // ==============================================================================
