@@ -1,6 +1,6 @@
 {
   "name": "electron-color-picker",
-  "version": "0.1.0-dev.1",
+  "version": "0.1.0",
   "author": "mockingbot",
   "license": "MIT",
   "description": "Pick color from Desktop, suitable for use with Electron.",
@@ -28,11 +28,11 @@
     "npm": ">=6"
   },
   "peerDependencies": {
-    "electron": "^2 || ^1.8"
+    "electron": ">=1.8.1"
   },
   "devDependencies": {
-    "dev-dep-tool": "0.3.0-dev.0",
-    "dev-dep-babel": "0.3.0-dev.0",
-    "dr-js": "0.15.1-dev.6"
+    "dr-js": "0.16.0-dev.9",
+    "dev-dep-tool": "0.3.1-dev.2",
+    "dev-dep-babel": "0.3.1-dev.2"
   }
 }

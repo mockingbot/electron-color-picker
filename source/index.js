@@ -8,8 +8,12 @@ const runColorPicker = (() => {
 })()
 
 const REGEXP_COLOR_HEX_RGB = /#[A-F0-9]{6}/
+let isRunning = false
 const getColorHexRGB = async () => {
+  if (isRunning) throw new Error('color picker already running!')
+  isRunning = true
   const { possibleColorString } = await runColorPicker()
+  isRunning = false
   const [ colorHex ] = REGEXP_COLOR_HEX_RGB.exec(possibleColorString.toUpperCase()) || [ '' ]
   __DEV__ && console.log(`[electron-color-picker] get hex color: [${colorHex}] from: ${possibleColorString}`)
   return colorHex

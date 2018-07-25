@@ -8,7 +8,7 @@ import { generateExportInfo } from 'dev-dep-tool/library/ExportIndex/generateInf
 import { renderMarkdownExportPath, renderMarkdownFileLink } from 'dev-dep-tool/library/ExportIndex/renderMarkdown'
 
 import { stringIndentLine } from 'dr-js/module/common/format'
-import { getDirectoryContent, walkDirectoryContent } from 'dr-js/module/node/file/Directory'
+import { getDirectoryInfoTree, walkDirectoryInfoTree } from 'dr-js/module/node/file/Directory'
 
 import { engines, peerDependencies } from '../package.json'
 
@@ -17,7 +17,7 @@ const fromRoot = (...args) => resolve(PATH_ROOT, ...args)
 
 const collectSourceRouteMap = async ({ logger }) => {
   const { parseExport, getSourceRouteMap } = createExportParser({ logger })
-  await walkDirectoryContent(await getDirectoryContent(fromRoot('source')), (path, name) => name !== 'index.example.js' && parseExport(resolve(path, name)))
+  await walkDirectoryInfoTree(await getDirectoryInfoTree(fromRoot('source')), ({ path, name }) => name !== 'index.example.js' && parseExport(path))
   return getSourceRouteMap()
 }
 

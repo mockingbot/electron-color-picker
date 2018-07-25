@@ -24,7 +24,7 @@
 >     "npm": ">=6"
 >   },
 >   "peerDependencies": {
->     "electron": "^2 || ^1.8"
+>     "electron": ">=1.8.1"
 >   }
 > }
 > ```
