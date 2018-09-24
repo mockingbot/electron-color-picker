@@ -1,14 +1,14 @@
 import { resolve } from 'path'
 import { execSync } from 'child_process'
 
-import { argvFlag, runMain } from 'dev-dep-tool/library/__utils__'
-import { getLogger } from 'dev-dep-tool/library/logger'
-import { wrapFileProcessor, fileProcessorBabel } from 'dev-dep-tool/library/fileProcessor'
-import { initOutput, packOutput, publishOutput } from 'dev-dep-tool/library/commonOutput'
-import { getUglifyESOption, minifyFileListWithUglifyEs } from 'dev-dep-tool/library/uglify'
-
 import { binary as formatBinary } from 'dr-js/module/common/format'
-import { getFileList } from 'dr-js/module/node/file/Directory'
+
+import { argvFlag, runMain } from 'dev-dep-tool/library/main'
+import { getLogger } from 'dev-dep-tool/library/logger'
+import { getScriptFileListFromPathList } from 'dev-dep-tool/library/fileList'
+import { initOutput, packOutput, publishOutput } from 'dev-dep-tool/library/commonOutput'
+import { wrapFileProcessor, fileProcessorBabel } from 'dev-dep-tool/library/fileProcessor'
+import { getTerserOption, minifyFileListWithTerser } from 'dev-dep-tool/library/minify'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../output-gitignore')
@@ -29,18 +29,20 @@ runMain(async (logger) => {
   padLog(`build output`)
   execSync('npm run build-library', execOptionRoot)
 
+  const fileList = await getScriptFileListFromPathList([ 'library' ], fromOutput)
+
   padLog(`minify output`)
-  const outputScriptList = (await getFileList(fromOutput('library'))).filter((path) => path.endsWith('.js') && !path.endsWith('.test.js'))
-  await minifyFileListWithUglifyEs({
-    option: getUglifyESOption({ isDevelopment: false, isModule: false }),
-    fileList: outputScriptList,
+  await minifyFileListWithTerser({
+    fileList,
+    option: getTerserOption(),
     rootPath: PATH_OUTPUT,
     logger
   })
+
   log(`process output`)
   let sizeCodeReduceModule = 0
   const processBabel = wrapFileProcessor({ processor: fileProcessorBabel, logger })
-  for (const filePath of outputScriptList) sizeCodeReduceModule += await processBabel(filePath)
+  for (const filePath of fileList) sizeCodeReduceModule += await processBabel(filePath)
   log(`size reduce: ${formatBinary(sizeCodeReduceModule)}B`)
 
   const pathPackagePack = await packOutput({ fromRoot, fromOutput, logger })
