@@ -9,7 +9,7 @@ Pick color from Desktop, suitable for use with Electron.
 
 [i:npm]: https://img.shields.io/npm/v/electron-color-picker.svg?colorB=blue
 [i:npm-dev]: https://img.shields.io/npm/v/electron-color-picker/dev.svg
-[l:npm]: https://www.npmjs.com/package/electron-color-picker
+[l:npm]: https://npm.im/electron-color-picker
 [i:size]: https://packagephobia.now.sh/badge?p=electron-color-picker
 [l:size]: https://packagephobia.now.sh/result?p=electron-color-picker
 [i:lint]: https://img.shields.io/badge/code_style-standard_ES6+-yellow.svg
@@ -43,4 +43,4 @@ const getColor = async () => {
 ```
 
 [l:scrot]: https://en.wikipedia.org/wiki/Scrot
-[l:desktop-screenshot]: https://www.npmjs.com/package/desktop-screenshot
+[l:desktop-screenshot]: https://npm.im/desktop-screenshot
