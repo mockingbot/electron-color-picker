@@ -1,11 +1,11 @@
 import { resolve } from 'path'
 import { writeFileSync } from 'fs'
 
-import { runMain } from 'dev-dep-tool/module/main'
-import { getLogger } from 'dev-dep-tool/module/logger'
-import { collectSourceRouteMap } from 'dev-dep-tool/module/ExportIndex/parseExport'
-import { generateExportInfo } from 'dev-dep-tool/module/ExportIndex/generateInfo'
-import { autoAppendMarkdownHeaderLink, renderMarkdownExportPath, renderMarkdownFileLink } from 'dev-dep-tool/module/ExportIndex/renderMarkdown'
+import { runMain } from 'dr-dev/module/main'
+import { getLogger } from 'dr-dev/module/logger'
+import { collectSourceRouteMap } from 'dr-dev/module/ExportIndex/parseExport'
+import { generateExportInfo } from 'dr-dev/module/ExportIndex/generateInfo'
+import { autoAppendMarkdownHeaderLink, renderMarkdownExportPath, renderMarkdownFileLink } from 'dr-dev/module/ExportIndex/renderMarkdown'
 
 import { stringIndentLine } from 'dr-js/module/common/format'
 

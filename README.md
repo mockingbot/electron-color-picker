@@ -15,7 +15,7 @@ Pick color from Desktop, suitable for use with Electron.
 [i:lint]: https://img.shields.io/badge/code_style-standard_ES6+-yellow.svg
 [l:lint]: https://standardjs.com
 
-#### Usage
+#### Note
 
 On Windows & MacOS will use our native color-picker.
 
@@ -26,12 +26,35 @@ Error will be thrown:
 - when try to start multiple color-picker.
 - on unsupported platform.
 
-```js
-import { clipboard } from 'electron'
-import { getColorHexRGB } from 'electron-color-picker'
+#### Example
 
-const getColor = async () => {
-  // color may be `#0099ff` or `` (pick cancelled)
+📁 [example/](example/)
+
+basic implementation of using DOM Button
+to trigger color picking
+and pass result back through ipc
+
+try example with:
+```bash
+cd example
+npm install
+npm start
+```
+
+#### Usage
+
+first add this package to your project: 
+```bash
+npm install electron-color-picker
+```
+
+sample function `saveColorToClipboard()`:
+```js
+const { clipboard } = require('electron')
+const { getColorHexRGB } = require('electron-color-picker')
+
+const saveColorToClipboard = async () => {
+  // color may be `#0099ff` or `` (pick cancelled with ESC)
   const color = await getColorHexRGB().catch((error) => {
     console.warn(`[ERROR] getColor`, error)
     return ''

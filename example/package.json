@@ -1,0 +1,10 @@
+{
+  "name": "electron-color-picker-example",
+  "scripts": {
+    "start": "electron ./main.js"
+  },
+  "dependencies": {
+    "electron": ">=1.8.1",
+    "electron-color-picker": "*"
+  }
+}

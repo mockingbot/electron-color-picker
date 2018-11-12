@@ -3,12 +3,12 @@ import { execSync } from 'child_process'
 
 import { binary as formatBinary } from 'dr-js/module/common/format'
 
-import { argvFlag, runMain } from 'dev-dep-tool/module/main'
-import { getLogger } from 'dev-dep-tool/module/logger'
-import { getScriptFileListFromPathList } from 'dev-dep-tool/module/fileList'
-import { initOutput, packOutput, publishOutput } from 'dev-dep-tool/module/commonOutput'
-import { processFileList, fileProcessorBabel } from 'dev-dep-tool/module/fileProcessor'
-import { getTerserOption, minifyFileListWithTerser } from 'dev-dep-tool/module/minify'
+import { argvFlag, runMain } from 'dr-dev/module/main'
+import { getLogger } from 'dr-dev/module/logger'
+import { getScriptFileListFromPathList } from 'dr-dev/module/fileList'
+import { initOutput, packOutput, publishOutput } from 'dr-dev/module/commonOutput'
+import { processFileList, fileProcessorBabel } from 'dr-dev/module/fileProcessor'
+import { getTerserOption, minifyFileListWithTerser } from 'dr-dev/module/minify'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../output-gitignore')

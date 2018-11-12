@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+</head>
+<body style="overflow: hidden; display: flex; flex-flow: column; align-items: stretch; justify-content: center; width: 100vw; height: 100vh;">
+<button id="button-test-color-picker">Test ColorPicker</button>
+<pre id="result-color-picker">RESULT COLOR</pre>
+<pre id="result-color-picker-preview" style="border: 1px solid #fff;">RESULT COLOR PREVIEW</pre>
+<script>
+  document.querySelector('#button-test-color-picker').onclick = async () => {
+    const color = await window.GET_COLOR_HEX_RGB() // added from preload script
+    document.querySelector('#result-color-picker').innerText = `Color: ${color}`
+    document.querySelector('#result-color-picker-preview').style.background = color
+  }
+</script>
+</body>
+</html>
