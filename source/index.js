@@ -1,7 +1,7 @@
 const DEFAULT_RUN_COLOR_PICKER = () => { throw new Error(`[electron-color-picker] unsupported ${process.platform}-${process.arch}`) }
 const runColorPicker = (() => {
   try {
-    const { runColorPicker } = require(`./${process.platform}`)
+    const { runColorPicker } = require(`./${process.platform}`) // TODO: NOTE: this is a `dynamic` require
     return runColorPicker
   } catch (error) { __DEV__ && console.warn(`[electron-color-picker] error require('./${process.platform}')`, error) }
   return DEFAULT_RUN_COLOR_PICKER

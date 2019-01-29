@@ -1,13 +1,12 @@
 import { resolve } from 'path'
 import { writeFileSync } from 'fs'
 
-import { runMain } from 'dr-dev/module/main'
-import { getLogger } from 'dr-dev/module/logger'
-import { collectSourceRouteMap } from 'dr-dev/module/ExportIndex/parseExport'
-import { generateExportInfo } from 'dr-dev/module/ExportIndex/generateInfo'
-import { autoAppendMarkdownHeaderLink, renderMarkdownExportPath, renderMarkdownFileLink } from 'dr-dev/module/ExportIndex/renderMarkdown'
+import { indentLine } from 'dr-js/module/common/string'
 
-import { stringIndentLine } from 'dr-js/module/common/format'
+import { collectSourceRouteMap } from 'dr-dev/module/node/export/parse'
+import { generateExportInfo } from 'dr-dev/module/node/export/generate'
+import { autoAppendMarkdownHeaderLink, renderMarkdownExportPath, renderMarkdownFileLink } from 'dr-dev/module/node/export/renderMarkdown'
+import { runMain } from 'dr-dev/module/main'
 
 import { engines, peerDependencies } from '../package.json'
 
@@ -17,7 +16,7 @@ const fromRoot = (...args) => resolve(PATH_ROOT, ...args)
 const renderMarkdownPackage = () => [
   renderMarkdownFileLink('package.json'),
   '> ```',
-  stringIndentLine(JSON.stringify({ engines, peerDependencies }, undefined, '  '), '> '),
+  indentLine(JSON.stringify({ engines, peerDependencies }, undefined, 2), '> '),
   '> ```'
 ]
 
@@ -45,4 +44,4 @@ runMain(async (logger) => {
     ),
     ''
   ].join('\n'))
-}, getLogger('generate-export'))
+}, 'generate-export')
