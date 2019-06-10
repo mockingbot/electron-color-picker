@@ -1,9 +1,9 @@
-const { join } = require('path')
-const { app, ipcMain, BrowserWindow } = require('electron')
-const { getColorHexRGB } = require('electron-color-picker')
+import { join } from 'path'
+import { app, ipcMain, BrowserWindow } from 'electron'
+import { getColorHexRGB } from './electronColorPicker'
 
-const PATH_HTML_FILE = join(__dirname, './renderer/index.html')
-const PATH_PRELOAD = join(__dirname, './renderer/preload.js')
+const PATH_HTML_FILE = join(__dirname, '../renderer/index.html')
+const PATH_PRELOAD = join(__dirname, '../renderer/preload.js')
 
 app.on('window-all-closed', () => {
   app.quit()

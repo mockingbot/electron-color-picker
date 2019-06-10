@@ -5,7 +5,7 @@
 [![i:lint]][l:lint]
 [![i:npm-dev]][l:npm]
 
-Pick color from Desktop, suitable for use with Electron.
+Pick color from Desktop, in Electron.
 
 [i:npm]: https://img.shields.io/npm/v/electron-color-picker.svg?colorB=blue
 [i:npm-dev]: https://img.shields.io/npm/v/electron-color-picker/dev.svg
@@ -14,6 +14,8 @@ Pick color from Desktop, suitable for use with Electron.
 [l:size]: https://packagephobia.now.sh/result?p=electron-color-picker
 [i:lint]: https://img.shields.io/badge/code_style-standard_ES6+-yellow.svg
 [l:lint]: https://standardjs.com
+
+[//]: # (NON_PACKAGE_CONTENT)
 
 #### Note
 
@@ -30,28 +32,32 @@ Error will be thrown:
 
 📁 [example/](example/)
 
-basic implementation of using DOM Button
-to trigger color picking
-and pass result back through ipc
+Basic implementation of using DOM Button,
+to trigger color picking and pass result back through `ipc`.
 
-try example with:
+Try example with:
 ```bash
-cd example
+cd example/
+
 npm install
-npm start
+
+npm run-dev # for debug with electron
+# or
+npm run-prod # for electron-packager output
 ```
+
 
 #### Usage
 
-first add this package to your project: 
+First add this package to your project: 
 ```bash
 npm install electron-color-picker
 ```
 
-sample function `saveColorToClipboard()`:
+Sample function `saveColorToClipboard()`:
 ```js
 const { clipboard } = require('electron')
-const { getColorHexRGB } = require('electron-color-picker')
+const { getColorHexRGB } = require('electron-color-picker') // TODO: NOTE: this can not be directly packed for release, check below
 
 const saveColorToClipboard = async () => {
   // color may be `#0099ff` or `` (pick cancelled with ESC)
@@ -64,6 +70,45 @@ const saveColorToClipboard = async () => {
   color && clipboard.writeText(color)
 }
 ```
+
+
+#### About release packaging
+
+To use this package in released Electron app,
+some custom repack steps is required.
+(mainly for platform darwin (OSX), since the binary has external resource file)
+
+Most Electron app use `electron-packager`,
+and generate a output directory structure like:
+```
+./
+  resources/
+    app.asar # this should be your packed js code & other resource
+    electron.asar
+  locales/
+  swiftshader/
+  resources.pak
+  chrome_100_percent.pak
+  ...
+```
+
+- One option is to set option `asar: false` for `electron-packager`,
+  and all file `resources/app.asar` will be unpacked into `resources/app/`
+
+- Another option is to use script to create a output directory structure like:
+  ```
+  ./
+    resources/
+      electron-color-picker/ # copy from `node_modules`
+        ...
+      app.asar
+      electron.asar
+    ...
+  ```
+  And in JS code, require from path like:
+  `const { getColorHexRGB } = require('../electron-color-picker')`
+  Check `example/` for this implementation.
+
 
 [l:scrot]: https://en.wikipedia.org/wiki/Scrot
 [l:desktop-screenshot]: https://npm.im/desktop-screenshot

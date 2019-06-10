@@ -1,10 +1,24 @@
 {
   "name": "electron-color-picker-example",
+  "main": "./main/index.js",
   "scripts": {
-    "start": "electron ./main.js"
+    "// script ======================": "",
+    "script-pack-0-source": "npx babel-node ./script/pack-0-source",
+    "script-pack-0-source-dev": "npx babel-node ./script/pack-0-source dev",
+    "script-pack-1-output": "npx babel-node ./script/pack-1-output",
+    "// build =======================": "",
+    "build-pack-0-source": "babel ./source --out-dir ./pack-0-source-gitignore --copy-files",
+    "build-pack-0-source-dev": "cross-env BABEL_ENV=dev npm run build-pack-0-source",
+    "// =============================": "",
+    "run-dev": "npm run script-pack-0-source-dev && electron ./pack-0-source-gitignore/main/index.js",
+    "run-prod": "npm run script-pack-0-source && npm run script-pack-1-output && dr-js -o ./pack-1-output-gitignore"
   },
-  "dependencies": {
-    "electron": ">=1.8.1",
-    "electron-color-picker": "*"
+  "devDependencies": {
+    "dr-dev": "0.0.6-dev.6",
+    "dr-dev-babel": "0.0.6-dev.6",
+    "dr-js": "0.22.1-dev.0",
+    "electron": "^4.2.6",
+    "electron-packager": "^14.0.1",
+    "electron-color-picker": "0.1.3-dev.1"
   }
 }

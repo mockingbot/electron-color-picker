@@ -1,4 +1,4 @@
-const { ipcRenderer } = require('electron')
+import { ipcRenderer } from 'electron'
 
 // BrowserWindow.preload: Specifies a script that will be loaded before other scripts run in the page.
 
