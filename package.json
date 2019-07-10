@@ -1,7 +1,7 @@
 {
   "name": "electron-color-picker",
-  "version": "0.1.3-dev.0",
-  "description": "Pick color from Desktop, suitable for use with Electron.",
+  "version": "0.1.3-dev.1",
+  "description": "Pick color from Desktop, in Electron.",
   "author": "mockingbot",
   "license": "MIT",
   "keywords": [
@@ -12,7 +12,6 @@
   "main": "library/index.js",
   "scripts": {
     "// script ======================": "",
-    "script-base": "babel-node ./script quiet",
     "script-pack": "babel-node ./script quiet pack",
     "script-publish": "babel-node ./script pack publish",
     "script-publish-dev": "babel-node ./script pack publish-dev",
@@ -31,7 +30,8 @@
     "electron": ">=1.8.1"
   },
   "devDependencies": {
-    "dr-dev": "0.0.6-dev.3",
-    "dr-dev-babel": "0.0.6-dev.3"
+    "dr-dev": "0.0.6-dev.6",
+    "dr-dev-babel": "0.0.6-dev.6",
+    "dr-js": "0.22.1-dev.0"
   }
 }
