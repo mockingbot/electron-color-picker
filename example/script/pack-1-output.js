@@ -17,11 +17,13 @@ const getElectronVersion = () => {
   return electronVersion
 }
 
+const APP_NAME = 'ExampleApp'
+
 runMain(async (logger) => {
   const { padLog, log } = logger
 
   padLog('reset output')
-  await modify.delete(fromOutput())
+  await modify.delete(fromOutput()).catch(() => {})
 
   padLog('build with "electron-packager" (may auto download electron)')
   debug('electron-packager').enabled = true // debug.enable('*')
@@ -29,10 +31,10 @@ runMain(async (logger) => {
     electronVersion: getElectronVersion(),
     platform: process.platform,
     arch: process.arch,
-    // asar: true, // set to false for unpacked code source
+    asar: true, // set to false for unpacked code source
     dir: fromRoot('pack-0-source-gitignore/'),
     out: fromOutput(),
-    name: 'Example',
+    name: APP_NAME,
     appVersion: '0.0.0',
     appCopyright: `Copyright © ${new Date().getFullYear()} MockingBot`,
     // darwin
@@ -48,15 +50,17 @@ runMain(async (logger) => {
   log('electronPackagerOutputList:', electronPackagerOutputList)
 
   const [ electronPackagerOutput ] = electronPackagerOutputList // only one output since this is single arch packing
-
-  padLog('copy "electron-color-picker" to output "resources/electron-color-picker" ')
-  await modify.copy(
-    fromRoot('node_modules/electron-color-picker/'),
-    fromOutput(electronPackagerOutput, 'resources/electron-color-picker/')
+  const PATH_ELECTRON_COLOR_PICKER = fromRoot(electronPackagerOutput, process.platform !== 'darwin'
+    ? 'resources/electron-color-picker'
+    : `${APP_NAME}.app/Contents/Resources/electron-color-picker`
   )
 
+  padLog('copy "electron-color-picker" to output')
+  await modify.copy(fromRoot('node_modules/electron-color-picker/'), PATH_ELECTRON_COLOR_PICKER)
+  log('copied to:', PATH_ELECTRON_COLOR_PICKER)
+
   padLog('trim extra platform from "electron-color-picker" (OPTIONAL)') // Optional, to make output package smaller
-  process.platform !== 'win32' && await modify.delete(fromOutput(electronPackagerOutput, 'resources/electron-color-picker/library/win32/'))
-  process.platform !== 'linux' && await modify.delete(fromOutput(electronPackagerOutput, 'resources/electron-color-picker/library/linux/'))
-  process.platform !== 'darwin' && await modify.delete(fromOutput(electronPackagerOutput, 'resources/electron-color-picker/library/darwin/'))
-}, 'pack-0-source')
+  process.platform !== 'win32' && await modify.delete(fromOutput(PATH_ELECTRON_COLOR_PICKER, 'library/win32/'))
+  process.platform !== 'linux' && await modify.delete(fromOutput(PATH_ELECTRON_COLOR_PICKER, 'library/linux/'))
+  process.platform !== 'darwin' && await modify.delete(fromOutput(PATH_ELECTRON_COLOR_PICKER, 'library/darwin/'))
+}, 'pack-1-output')

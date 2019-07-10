@@ -17,7 +17,7 @@ runMain(async (logger) => {
   const { padLog } = logger
 
   padLog('reset output')
-  await modify.delete(fromOutput())
+  await modify.delete(fromOutput()).catch(() => {})
 
   if (!argvFlag('dev')) {
     padLog('[PROD] babel source file to output, or just copy for test')
