@@ -1,7 +1,7 @@
 import { resolve } from 'path'
 import { execSync } from 'child_process'
 
-import { getScriptFileListFromPathList } from 'dr-dev/module/node/fileList'
+import { getScriptFileListFromPathList } from 'dr-dev/module/node/file'
 import { runMain, argvFlag } from 'dr-dev/module/main'
 import { initOutput, packOutput, publishOutput } from 'dr-dev/module/output'
 import { processFileList, fileProcessorBabel } from 'dr-dev/module/fileProcessor'

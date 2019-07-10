@@ -1,5 +1,3 @@
 module.exports = {
-  extends: [ 'standard' ],
-  parser: 'babel-eslint',
-  globals: { __DEV__: false }
+  extends: [ './node_modules/dr-dev-babel/install/eslint-config-almost-standard-v13' ]
 }

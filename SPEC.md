@@ -20,8 +20,7 @@
 > ```
 > {
 >   "engines": {
->     "node": ">=8.2.1",
->     "npm": ">=6"
+>     "node": ">=8.2.1"
 >   },
 >   "peerDependencies": {
 >     "electron": ">=1.8.1"

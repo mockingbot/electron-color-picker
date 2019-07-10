@@ -2,7 +2,6 @@
 
 [![i:npm]][l:npm]
 [![i:size]][l:size]
-[![i:lint]][l:lint]
 [![i:npm-dev]][l:npm]
 
 Pick color from Desktop, in Electron.
@@ -12,28 +11,27 @@ Pick color from Desktop, in Electron.
 [l:npm]: https://npm.im/electron-color-picker
 [i:size]: https://packagephobia.now.sh/badge?p=electron-color-picker
 [l:size]: https://packagephobia.now.sh/result?p=electron-color-picker
-[i:lint]: https://img.shields.io/badge/code_style-standard_ES6+-yellow.svg
-[l:lint]: https://standardjs.com
 
 [//]: # (NON_PACKAGE_CONTENT)
 
-#### Note
+> #### Note
+> 
+> On Windows & MacOS will use our native color-picker.
+> 
+> On Linux will use [SCROT][l:scrot] to get screenshot and pick color from it.
+> The idea is directly borrowed from package [desktop-screenshot][l:desktop-screenshot].
+> 
+> Error will be thrown:
+> - when try to start multiple color-picker.
+> - on unsupported platform.
 
-On Windows & MacOS will use our native color-picker.
 
-On Linux will use [SCROT][l:scrot] to get screenshot and pick color from it.
-The idea is directly borrowed from package [desktop-screenshot][l:desktop-screenshot].
-
-Error will be thrown:
-- when try to start multiple color-picker.
-- on unsupported platform.
-
-#### Example
+## Example
 
 📁 [example/](example/)
 
-Basic implementation of using DOM Button,
-to trigger color picking and pass result back through `ipc`.
+Basic implementation of using DOM Button to trigger color picking,
+and pass result back through `ipc`.
 
 Try example with:
 ```bash
@@ -46,8 +44,11 @@ npm run-dev # for debug with electron
 npm run-prod # for electron-packager output
 ```
 
+for a more detailed explanation of the example setup,
+check: [example/concept.md](example/concept.md)
 
-#### Usage
+
+## Usage
 
 First add this package to your project: 
 ```bash
@@ -72,7 +73,7 @@ const saveColorToClipboard = async () => {
 ```
 
 
-#### About release packaging
+## About release packaging
 
 To use this package in released Electron app,
 some custom repack steps is required.

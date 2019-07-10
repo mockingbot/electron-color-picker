@@ -1,9 +1,9 @@
 import { resolve } from 'path'
 import { execSync } from 'child_process'
 
-import { modify } from 'dr-js/module/node/file/Modify'
+import { modifyCopy, modifyDeleteForce } from 'dr-js/module/node/file/Modify'
 
-import { getScriptFileListFromPathList } from 'dr-dev/module/node/fileList'
+import { getScriptFileListFromPathList } from 'dr-dev/module/node/file'
 import { runMain, argvFlag } from 'dr-dev/module/main'
 import { getTerserOption, minifyFileListWithTerser } from 'dr-dev/module/minify'
 
@@ -17,7 +17,7 @@ runMain(async (logger) => {
   const { padLog } = logger
 
   padLog('reset output')
-  await modify.delete(fromOutput()).catch(() => {})
+  await modifyDeleteForce(fromOutput())
 
   if (!argvFlag('dev')) {
     padLog('[PROD] babel source file to output, or just copy for test')
@@ -36,5 +36,5 @@ runMain(async (logger) => {
   }
 
   padLog('copy "package.json"')
-  await modify.copy(fromRoot('package.json'), fromOutput('package.json'))
+  await modifyCopy(fromRoot('package.json'), fromOutput('package.json'))
 }, 'pack-0-source')
