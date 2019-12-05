@@ -1,11 +1,11 @@
 import { resolve } from 'path'
 import { execSync } from 'child_process'
 
-import { modifyCopy, modifyDeleteForce } from 'dr-js/module/node/file/Modify'
+import { modifyCopy, modifyDeleteForce } from '@dr-js/core/module/node/file/Modify'
 
-import { getScriptFileListFromPathList } from 'dr-dev/module/node/file'
-import { runMain, argvFlag } from 'dr-dev/module/main'
-import { getTerserOption, minifyFileListWithTerser } from 'dr-dev/module/minify'
+import { getScriptFileListFromPathList } from '@dr-js/dev/module/node/file'
+import { runMain, argvFlag } from '@dr-js/dev/module/main'
+import { getTerserOption, minifyFileListWithTerser } from '@dr-js/dev/module/minify'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../pack-0-source-gitignore')

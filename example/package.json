@@ -1,4 +1,5 @@
 {
+  "private": true,
   "name": "electron-color-picker-example",
   "main": "./main/index.js",
   "scripts": {
@@ -13,12 +14,14 @@
     "run-dev": "npm run script-pack-0-source-dev && electron ./pack-0-source-gitignore/main/index.js",
     "run-prod": "npm run script-pack-0-source && npm run script-pack-1-output && dr-js -o ./pack-1-output-gitignore"
   },
-  "devDependencies": {
-    "dr-dev": "0.0.7-dev.1",
-    "dr-dev-babel": "0.0.7-dev.1",
-    "dr-js": "0.23.0-dev.2",
-    "electron": "^4",
-    "electron-packager": "^14",
+  "dependencies": {
     "electron-color-picker": "^0.1"
+  },
+  "devDependencies": {
+    "@dr-js/core": "^0.1.1",
+    "@dr-js/dev": "^0.1.2",
+    "@dr-js/dev-babel": "^0.1.2",
+    "electron": "^7",
+    "electron-packager": "^14"
   }
 }

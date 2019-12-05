@@ -3,9 +3,9 @@ import { resolve } from 'path'
 import ElectronPackager from 'electron-packager'
 // import debug from 'debug'
 
-import { modifyCopy, modifyDelete, modifyDeleteForce } from 'dr-js/module/node/file/Modify'
+import { modifyCopy, modifyDelete, modifyDeleteForce } from '@dr-js/core/module/node/file/Modify'
 
-import { runMain } from 'dr-dev/module/main'
+import { runMain } from '@dr-js/dev/module/main'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../pack-1-output-gitignore')

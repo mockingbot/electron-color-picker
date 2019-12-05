@@ -8,7 +8,7 @@ module.exports = {
     [ 'minify-replace', { replacements: [ { identifierName: '__DEV__', replacement: { type: 'booleanLiteral', value: isDev } } ] } ],
     [ 'module-resolver', {
       root: [ './' ],
-      alias: isModule ? undefined : { '^dr-([\\w-]+)/module/(.+)': 'dr-\\1/library/\\2' }
+      alias: isModule ? undefined : { '^@dr-js/([\\w-]+)/module/(.+)': '@dr-js/\\1/library/\\2' }
     } ]
   ],
   comments: false

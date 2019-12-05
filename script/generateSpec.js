@@ -1,10 +1,10 @@
 import { resolve } from 'path'
 import { writeFileSync } from 'fs'
 
-import { collectSourceRouteMap } from 'dr-dev/module/node/export/parse'
-import { generateExportInfo } from 'dr-dev/module/node/export/generate'
-import { getMarkdownFileLink, renderMarkdownAutoAppendHeaderLink, renderMarkdownBlockQuote, renderMarkdownExportPath } from 'dr-dev/module/node/export/renderMarkdown'
-import { runMain } from 'dr-dev/module/main'
+import { collectSourceRouteMap } from '@dr-js/dev/module/node/export/parse'
+import { generateExportInfo } from '@dr-js/dev/module/node/export/generate'
+import { getMarkdownFileLink, renderMarkdownAutoAppendHeaderLink, renderMarkdownBlockQuote, renderMarkdownExportPath } from '@dr-js/dev/module/node/export/renderMarkdown'
+import { runMain } from '@dr-js/dev/module/main'
 
 import { engines, peerDependencies } from '../package.json'
 
