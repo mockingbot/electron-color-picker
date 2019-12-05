@@ -6,8 +6,8 @@
 
 Pick color from Desktop, in Electron.
 
-[i:npm]: https://img.shields.io/npm/v/electron-color-picker.svg?colorB=blue
-[i:npm-dev]: https://img.shields.io/npm/v/electron-color-picker/dev.svg
+[i:npm]: https://img.shields.io/npm/v/electron-color-picker?colorB=blue
+[i:npm-dev]: https://img.shields.io/npm/v/electron-color-picker/dev
 [l:npm]: https://npm.im/electron-color-picker
 [i:size]: https://packagephobia.now.sh/badge?p=electron-color-picker
 [l:size]: https://packagephobia.now.sh/result?p=electron-color-picker
@@ -16,7 +16,7 @@ Pick color from Desktop, in Electron.
 
 > #### Note
 > 
-> On Windows & MacOS will use our native color-picker.
+> On Windows & MacOS will use our native [color-picker](https://github.com/mockingbot/mb_colorpicker_desktop_native).
 > 
 > On Linux will use [SCROT][l:scrot] to get screenshot and pick color from it.
 > The idea is directly borrowed from package [desktop-screenshot][l:desktop-screenshot].
@@ -69,6 +69,19 @@ const saveColorToClipboard = async () => {
 
   console.log(`getColor: ${color}`)
   color && clipboard.writeText(color)
+}
+
+const darwinScreenPermissionSample = async () => { // darwin only (since electron-color-picker@2)
+  const { darwinGetScreenPermissionGranted, darwinRequestScreenPermissionPopup } = require('electron-color-picker')
+
+  // initial check
+  const isGranted = await darwinGetScreenPermissionGranted()
+  console.log('darwinGetScreenPermissionGranted:', isGranted)
+
+  if (!isGranted) { // request user for permission
+    const isGranted = await darwinRequestScreenPermissionPopup('com.github.Electron') // use default Electron bundle id for test without repacking, replace with actual bundle id when releasing
+    console.log('darwinRequestScreenPermissionPopup:', isGranted)
+  }
 }
 ```
 

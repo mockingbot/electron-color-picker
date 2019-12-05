@@ -4,15 +4,41 @@
   <meta charset="utf-8">
 </head>
 <body style="overflow: hidden; display: flex; flex-flow: column; align-items: stretch; justify-content: center; width: 100vw; height: 100vh;">
-<button id="button-test-color-picker">Test ColorPicker</button>
-<pre id="result-color-picker">RESULT COLOR</pre>
-<pre id="result-color-picker-preview" style="border: 1px solid #fff;">RESULT COLOR PREVIEW</pre>
-<script>
-  document.querySelector('#button-test-color-picker').onclick = async () => {
-    const color = await window.GET_COLOR_HEX_RGB() // added from preload script
-    document.querySelector('#result-color-picker').innerText = `Color: ${color}`
-    document.querySelector('#result-color-picker-preview').style.background = color
+<fieldset>
+  <legend>GET_COLOR_HEX_RGB</legend>
+  <button id="button-color-picker">Pick Color</button>
+  <pre id="result-color-picker">RESULT COLOR</pre>
+  <pre id="result-color-picker-preview" style="border: 1px solid #fff;">RESULT COLOR PREVIEW</pre>
+</fieldset>
+<fieldset id="field-darwin-screen-permission" style="display: none;">
+  <legend>DARWIN_SCREEN_PERMISSION</legend>
+  <button id="button-darwin-screen-permission">Request Permission</button>
+  <pre id="result-darwin-screen-permission">RESULT STATUS</pre>
+</fieldset>
+<script> // should wait after `preload.js` run
+window.onload = async () => {
+  const {
+    GET_COLOR_HEX_RGB,
+    DARWIN_GET_SCREEN_PERMISSION_GRANTED, // darwin only
+    DARWIN_REQUEST_SCREEN_PERMISSION_POPUP // darwin only
+  } = window.PRELOAD // added from preload script
+
+  const qS = (selector) => document.querySelector(selector)
+
+  qS('#button-color-picker').onclick = async () => {
+    const color = await GET_COLOR_HEX_RGB()
+    qS('#result-color-picker').innerText = `Color: ${color}`
+    qS('#result-color-picker-preview').style.background = color
   }
+
+  if (DARWIN_GET_SCREEN_PERMISSION_GRANTED && DARWIN_REQUEST_SCREEN_PERMISSION_POPUP) {
+    qS('#result-darwin-screen-permission').innerText = `RESULT: ${await DARWIN_GET_SCREEN_PERMISSION_GRANTED()}` // first check
+    qS('#field-darwin-screen-permission').style.display = ''
+    qS('#button-darwin-screen-permission').onclick = async () => {
+      qS('#result-darwin-screen-permission').innerText = `RESULT: ${await DARWIN_REQUEST_SCREEN_PERMISSION_POPUP()}`
+    }
+  }
+}
 </script>
 </body>
 </html>

@@ -1,6 +1,10 @@
 import { join } from 'path'
 import { app, ipcMain, BrowserWindow } from 'electron'
-import { getColorHexRGB } from './electronColorPicker'
+import {
+  getColorHexRGB,
+  darwinGetScreenPermissionGranted,
+  darwinRequestScreenPermissionPopup
+} from './electronColorPicker'
 
 const PATH_HTML_FILE = join(__dirname, '../renderer/index.html')
 const PATH_PRELOAD = join(__dirname, '../renderer/preload.js')
@@ -9,19 +13,37 @@ app.on('window-all-closed', () => {
   app.quit()
 })
 
-app.on('ready', () => {
-  const browserWindow = new BrowserWindow({ webPreferences: { nodeIntegration: false, preload: PATH_PRELOAD } })
-  browserWindow.webContents.loadFile(PATH_HTML_FILE)
-  browserWindow.webContents.openDevTools()
-  browserWindow.webContents.executeJavaScript(`console.log('try: "window.GET_COLOR_HEX_RGB().then(console.log)"')`).catch(console.warn)
-
-  ipcMain.addListener('main:ipc-task:color-picker', async (ipcEvent) => {
-    console.log('[main:ipc-task:color-picker] start')
-    const { result, error } = await getColorHexRGB().then(
+app.on('ready', async () => {
+  const addIpcTask = (pingEvent, pongEvent, taskFunc) => ipcMain.addListener(pingEvent, async (ipcEvent) => {
+    console.log(`[${pingEvent}] start`)
+    const { result, error } = await taskFunc().then(
       (result) => ({ result }),
       (error) => ({ error })
     )
-    console.log('[main:ipc-task:color-picker] done', { result, error })
-    !ipcEvent.sender.isDestroyed() && ipcEvent.sender.send('renderer:ipc-task:color-picker:result', { result, error })
+    console.log(`[${pingEvent}] done`, { result, error })
+    !ipcEvent.sender.isDestroyed() && ipcEvent.sender.send(pongEvent, { result, error })
   })
+
+  addIpcTask(
+    'main:ipc-task:color-picker',
+    'renderer:ipc-task:color-picker:result',
+    getColorHexRGB
+  )
+
+  darwinGetScreenPermissionGranted && addIpcTask(
+    'main:ipc-task:darwin-permission-check',
+    'renderer:ipc-task:darwin-permission-check:result',
+    darwinGetScreenPermissionGranted
+  )
+
+  darwinRequestScreenPermissionPopup && addIpcTask(
+    'main:ipc-task:darwin-permission-request',
+    'renderer:ipc-task:darwin-permission-request:result',
+    () => darwinRequestScreenPermissionPopup('com.github.Electron') // use default Electron bundle id
+  )
+
+  const browserWindow = new BrowserWindow({ webPreferences: { nodeIntegration: false, preload: PATH_PRELOAD } })
+  await browserWindow.webContents.loadFile(PATH_HTML_FILE)
+  browserWindow.webContents.openDevTools()
+  browserWindow.webContents.executeJavaScript(`console.log('try: "window.PRELOAD.GET_COLOR_HEX_RGB().then(console.log)"')`).catch(console.warn)
 })
