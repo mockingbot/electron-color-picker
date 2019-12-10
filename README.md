@@ -71,7 +71,7 @@ const saveColorToClipboard = async () => {
   color && clipboard.writeText(color)
 }
 
-const darwinScreenPermissionSample = async () => { // darwin only (since electron-color-picker@2)
+const darwinScreenPermissionSample = async () => { // darwin only, throw error on other platform (since electron-color-picker@2)
   const { darwinGetScreenPermissionGranted, darwinRequestScreenPermissionPopup } = require('electron-color-picker')
 
   // initial check

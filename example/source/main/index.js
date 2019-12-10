@@ -9,6 +9,8 @@ import {
 const PATH_HTML_FILE = join(__dirname, '../renderer/index.html')
 const PATH_PRELOAD = join(__dirname, '../renderer/preload.js')
 
+const isDarwin = process.platform === 'darwin'
+
 app.on('window-all-closed', () => {
   app.quit()
 })
@@ -29,14 +31,12 @@ app.on('ready', async () => {
     'renderer:ipc-task:color-picker:result',
     getColorHexRGB
   )
-
-  darwinGetScreenPermissionGranted && addIpcTask(
+  isDarwin && addIpcTask(
     'main:ipc-task:darwin-permission-check',
     'renderer:ipc-task:darwin-permission-check:result',
     darwinGetScreenPermissionGranted
   )
-
-  darwinRequestScreenPermissionPopup && addIpcTask(
+  isDarwin && addIpcTask(
     'main:ipc-task:darwin-permission-request',
     'renderer:ipc-task:darwin-permission-request:result',
     () => darwinRequestScreenPermissionPopup('com.github.Electron') // use default Electron bundle id

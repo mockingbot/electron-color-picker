@@ -3,8 +3,8 @@ const DEFAULT_NO_FUNC = () => { throw new Error(`[electron-color-picker] no func
 
 const {
   runColorPicker = DEFAULT_RUN_COLOR_PICKER,
-  getDarwinScreenPermissionGranted, // darwin only
-  requestDarwinScreenPermissionPopup // darwin only
+  getDarwinScreenPermissionGranted = DEFAULT_NO_FUNC, // darwin only, throw error on other platform
+  requestDarwinScreenPermissionPopup = DEFAULT_NO_FUNC // darwin only, throw error on other platform
 } = (() => {
   try {
     return require(`./${process.platform}`) // TODO: NOTE: this is a `dynamic` require
@@ -29,13 +29,13 @@ const getColorHexRGB = async () => {
   return colorHex
 }
 
-const darwinGetScreenPermissionGranted = process.platform ? DEFAULT_NO_FUNC : async () => {
+const darwinGetScreenPermissionGranted = async () => {
   const { isDarwinScreenPermissionGranted } = await mutexRunColorPicker(getDarwinScreenPermissionGranted)
   __DEV__ && console.log(`[electron-color-picker] isDarwinScreenPermissionGranted: ${isDarwinScreenPermissionGranted}`)
   return isDarwinScreenPermissionGranted
 }
 
-const darwinRequestScreenPermissionPopup = process.platform ? DEFAULT_NO_FUNC : async (appBundleId) => {
+const darwinRequestScreenPermissionPopup = async (appBundleId) => {
   if (!appBundleId) throw new Error('[electron-color-picker] appBundleId expected')
   await mutexRunColorPicker(requestDarwinScreenPermissionPopup, appBundleId)
   return getDarwinScreenPermissionGranted() // get and return result
@@ -43,6 +43,6 @@ const darwinRequestScreenPermissionPopup = process.platform ? DEFAULT_NO_FUNC : 
 
 export {
   getColorHexRGB,
-  darwinGetScreenPermissionGranted,
-  darwinRequestScreenPermissionPopup
+  darwinGetScreenPermissionGranted, // darwin only, throw error on other platform
+  darwinRequestScreenPermissionPopup // darwin only, throw error on other platform
 }
