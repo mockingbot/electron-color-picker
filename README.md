@@ -79,7 +79,7 @@ const darwinScreenPermissionSample = async () => { // darwin only, throw error o
   console.log('darwinGetScreenPermissionGranted:', isGranted)
 
   if (!isGranted) { // request user for permission
-    const isGranted = await darwinRequestScreenPermissionPopup('com.github.Electron') // use default Electron bundle id for test without repacking, replace with actual bundle id when releasing
+    const isGranted = await darwinRequestScreenPermissionPopup()
     console.log('darwinRequestScreenPermissionPopup:', isGranted)
   }
 }

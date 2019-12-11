@@ -1,6 +1,8 @@
 import { join as joinPath } from 'path'
 import { execFile as execFileFromAsar } from 'child_process' // CHECK: https://electronjs.org/docs/tutorial/application-packaging#executing-binaries-inside-asar-archive
 
+import { getDarwinMainBundleIdHackAsync } from './darwinMainBundleIdHack' // hack for detecting main bundle id
+
 const PATH_BINARY = joinPath(__dirname, 'ColorPicker')
 
 const runColorPicker = () => new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, (error, stdout, stderr) => {
@@ -15,11 +17,15 @@ const getDarwinScreenPermissionGranted = () => new Promise((resolve, reject) => 
   resolve({ isDarwinScreenPermissionGranted: stdout.includes('Permission Granted: YES') })
 }))
 
-const requestDarwinScreenPermissionPopup = (appBundleId) => new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, [ '--mode=2', `--bundle-id=${appBundleId}` ], (error, stdout, stderr) => {
-  if (error) return reject(error)
-  __DEV__ && console.log('[requestDarwinScreenPermissionPopup]', { stdout, stderr })
-  resolve() // popup only, no permission result
-}))
+let mainBundleId
+const requestDarwinScreenPermissionPopup = async () => {
+  if (mainBundleId === undefined) mainBundleId = await getDarwinMainBundleIdHackAsync()
+  await new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, [ '--mode=2', `--bundle-id=${mainBundleId}` ], (error, stdout, stderr) => {
+    if (error) return reject(error)
+    __DEV__ && console.log('[requestDarwinScreenPermissionPopup]', { stdout, stderr })
+    resolve() // popup only, no permission result
+  }))
+}
 
 export {
   runColorPicker,

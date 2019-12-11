@@ -35,9 +35,8 @@ const darwinGetScreenPermissionGranted = async () => {
   return isDarwinScreenPermissionGranted
 }
 
-const darwinRequestScreenPermissionPopup = async (appBundleId) => {
-  if (!appBundleId) throw new Error('[electron-color-picker] appBundleId expected')
-  await mutexRunColorPicker(requestDarwinScreenPermissionPopup, appBundleId)
+const darwinRequestScreenPermissionPopup = async () => {
+  await mutexRunColorPicker(requestDarwinScreenPermissionPopup)
   return getDarwinScreenPermissionGranted() // get and return result
 }
 

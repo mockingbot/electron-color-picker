@@ -39,7 +39,7 @@ app.on('ready', async () => {
   isDarwin && addIpcTask(
     'main:ipc-task:darwin-permission-request',
     'renderer:ipc-task:darwin-permission-request:result',
-    () => darwinRequestScreenPermissionPopup('com.github.Electron') // use default Electron bundle id
+    darwinRequestScreenPermissionPopup
   )
 
   const browserWindow = new BrowserWindow({ webPreferences: { nodeIntegration: false, preload: PATH_PRELOAD } })
