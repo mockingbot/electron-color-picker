@@ -3,7 +3,6 @@ import { app, ipcMain, BrowserWindow } from 'electron'
 import {
   getColorHexRGB,
 
-  DARWIN_IS_PLATFORM_PRE_CATALINA,
   darwinGetScreenPermissionGranted,
   darwinRequestScreenPermissionPopup
 } from 'electron-color-picker'
@@ -22,7 +21,7 @@ app.on('ready', async () => {
     console.log(`[${pingEvent}] start`)
     const { result, error } = await taskFunc().then(
       (result) => ({ result }),
-      (error) => ({ error })
+      (error) => ({ error: String(error.stack || error) })
     )
     console.log(`[${pingEvent}] done`, { result, error })
     !ipcEvent.sender.isDestroyed() && ipcEvent.sender.send(pongEvent, { result, error })

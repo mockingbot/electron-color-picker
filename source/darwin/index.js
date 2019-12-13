@@ -32,19 +32,16 @@ const darwinRequestScreenPermissionPopup = DARWIN_IS_PLATFORM_PRE_CATALINA
     await new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, [ '--mode=2', `--bundle-id=${mainBundleId}` ], (error, stdout, stderr) => {
       if (error) return reject(error)
       __DEV__ && console.log('[darwinRequestScreenPermissionPopup]', { stdout, stderr })
-      resolve() // popup only, no permission result returned
+      resolve() // popup only, no permission result returned, will not wait for user to click anything
     }))
   }
 
-let isPermissionGranted
 const runColorPicker = DARWIN_IS_PLATFORM_PRE_CATALINA
   ? darwinRunColorPicker
-  : async () => {
-    if (isPermissionGranted === undefined) isPermissionGranted = await darwinGetScreenPermissionGranted()
-    if (isPermissionGranted === false) {
+  : async () => { // slower all-in-one
+    if (await darwinGetScreenPermissionGranted() === false) {
       await darwinRequestScreenPermissionPopup()
-      isPermissionGranted = await darwinGetScreenPermissionGranted()
-      if (!isPermissionGranted) return '' // denied permission
+      return '' // bail and wait for next permission check
     }
     return darwinRunColorPicker()
   }

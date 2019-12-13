@@ -16,7 +16,8 @@
 </fieldset>
 <fieldset id="field-darwin-screen-permission" style="display: none;">
   <legend>DARWIN_SCREEN_PERMISSION</legend>
-  <button id="button-darwin-screen-permission">Request Permission</button>
+  <button id="button-darwin-screen-permission-check">Check Permission</button>
+  <button id="button-darwin-screen-permission-popup">Request Permission</button>
   <pre id="result-darwin-screen-permission">RESULT STATUS</pre>
 </fieldset>
 <script> // should wait after `preload.js` run
@@ -39,10 +40,13 @@ window.onload = async () => {
   }
 
   if (DARWIN_GET_SCREEN_PERMISSION_GRANTED && DARWIN_REQUEST_SCREEN_PERMISSION_POPUP) {
-    qS('#result-darwin-screen-permission').innerText = `RESULT: ${await DARWIN_GET_SCREEN_PERMISSION_GRANTED()}` // first check
     qS('#field-darwin-screen-permission').style.display = ''
-    qS('#button-darwin-screen-permission').onclick = async () => {
-      qS('#result-darwin-screen-permission').innerText = `RESULT: ${await DARWIN_REQUEST_SCREEN_PERMISSION_POPUP()}`
+    qS('#button-darwin-screen-permission-check').onclick = async () => {
+      qS('#result-darwin-screen-permission').innerText = `RESULT: ${await DARWIN_GET_SCREEN_PERMISSION_GRANTED()}`
+    }
+    qS('#button-darwin-screen-permission-popup').onclick = async () => {
+      qS('#result-darwin-screen-permission').innerText = 'RESULT: undecided'
+      await DARWIN_REQUEST_SCREEN_PERMISSION_POPUP()
     }
   }
 }

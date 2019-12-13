@@ -35,6 +35,8 @@ runMain(async (logger) => {
   if (process.platform === 'win32') throw new Error('use a *nix platform to pack `.tgz` to preserve correct file permission!')
   await buildOutput({ logger })
   await processOutput({ logger })
+  logger.padLog('lint source')
+  execShell('npm run lint')
   await verifyGitStatusClean({ fromRoot, logger })
   const pathPackagePack = await packOutput({ fromRoot, fromOutput, logger })
   await publishOutput({ flagList: process.argv, packageJSON, pathPackagePack, extraArgs: [ '--userconfig', '~/mockingbot.npmrc' ], logger })

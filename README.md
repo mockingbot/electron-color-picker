@@ -80,15 +80,13 @@ const saveColorToClipboard = async () => {
 
 if (process.platform === 'darwin' && !DARWIN_IS_PLATFORM_PRE_CATALINA) {
   const darwinScreenPermissionSample = async () => {
-    let isGranted = await darwinGetScreenPermissionGranted() // initial check
+    const isGranted = await darwinGetScreenPermissionGranted() // initial check
     console.log('darwinGetScreenPermissionGranted:', isGranted)
-
-    if (!isGranted) { // request user for permission
-      isGranted = await darwinRequestScreenPermissionPopup()
-      console.log('darwinRequestScreenPermissionPopup:', isGranted)
+    if (!isGranted) { // request user for permission, no result, and will not wait for user click
+      await darwinRequestScreenPermissionPopup()
+      console.warn('no permission granted yet, try again')
+      return ''
     }
-
-    if (!isGranted) return console.warn('no permission granted')
     const color = await darwinGetColorHexRGB().catch((error) => {
       console.warn('[ERROR] getColor', error)
       return ''

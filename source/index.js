@@ -46,7 +46,7 @@ const darwinGetScreenPermissionGranted = async () => {
 
 const darwinRequestScreenPermissionPopup = async () => {
   await mutexRunColorPicker(__darwinRequestScreenPermissionPopup)
-  return darwinGetScreenPermissionGranted() // get and return result
+  // no result, wait for later check
 }
 
 export {
