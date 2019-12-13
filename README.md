@@ -14,6 +14,12 @@ Pick color from Desktop, in Electron.
 
 [//]: # (NON_PACKAGE_CONTENT)
 
+
+* [Example](#example)
+* [Usage](#usage)
+* [Advanced Usage](#advanced-usage)
+
+
 > #### Note
 > 
 > On Windows & MacOS will use our native [color-picker](https://github.com/mockingbot/mb_colorpicker_desktop_native).
@@ -24,6 +30,9 @@ Pick color from Desktop, in Electron.
 > Error will be thrown:
 > - when try to start multiple color-picker.
 > - on unsupported platform.
+
+[l:scrot]: https://en.wikipedia.org/wiki/Scrot
+[l:desktop-screenshot]: https://npm.im/desktop-screenshot
 
 
 ## Example
@@ -44,7 +53,7 @@ npm run-dev # for debug with electron
 npm run-prod # for electron-packager output
 ```
 
-for a more detailed explanation of the example setup,
+For a more detailed explanation of the example setup,
 check: [example/concept.md](example/concept.md)
 
 
@@ -98,5 +107,26 @@ if (process.platform === 'darwin' && !DARWIN_IS_PLATFORM_PRE_CATALINA) {
 ```
 
 
-[l:scrot]: https://en.wikipedia.org/wiki/Scrot
-[l:desktop-screenshot]: https://npm.im/desktop-screenshot
+## Advanced Usage
+
+To pull deeper code for specific platform,
+consider direct require/import the platform `index` file.
+Do read the source code and check the functionality though.
+
+```js
+const { // code with simple mutex wrapper
+  getColorHexRGB,
+  DARWIN_IS_PLATFORM_PRE_CATALINA,
+  darwinGetColorHexRGB,
+  darwinGetScreenPermissionGranted,
+  darwinRequestScreenPermissionPopup
+} = require('electron-color-picker')
+
+const { // platform specific function, with less check
+  runColorPicker,
+  DARWIN_IS_PLATFORM_PRE_CATALINA,
+  darwinRunColorPicker,
+  darwinGetScreenPermissionGranted,
+  darwinRequestScreenPermissionPopup
+} = require('electron-color-picker/library/darwin/index.js')
+```

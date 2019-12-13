@@ -41,7 +41,7 @@ const runColorPicker = DARWIN_IS_PLATFORM_PRE_CATALINA
   : async () => { // slower all-in-one
     if (await darwinGetScreenPermissionGranted() === false) {
       await darwinRequestScreenPermissionPopup()
-      return '' // bail and wait for next permission check
+      return { possibleColorString: '' } // bail and wait for next permission check
     }
     return darwinRunColorPicker()
   }
