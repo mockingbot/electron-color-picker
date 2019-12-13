@@ -5,7 +5,7 @@
 
 #### Export Path
 + 📄 [source/index.js](source/index.js)
-  - `DARWIN_IS_PLATFORM_PRE_CATALINA`, `darwinGetScreenPermissionGranted`, `darwinRequestScreenPermissionPopup`, `darwinRunColorPicker`, `getColorHexRGB`
+  - `DARWIN_IS_PLATFORM_PRE_CATALINA`, `darwinGetColorHexRGB`, `darwinGetScreenPermissionGranted`, `darwinRequestScreenPermissionPopup`, `getColorHexRGB`
 + 📄 [source/darwin/index.js](source/darwin/index.js)
   - `DARWIN_IS_PLATFORM_PRE_CATALINA`, `darwinGetScreenPermissionGranted`, `darwinRequestScreenPermissionPopup`, `darwinRunColorPicker`, `runColorPicker`
 + 📄 [source/linux/index.js](source/linux/index.js)

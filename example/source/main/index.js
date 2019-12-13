@@ -3,6 +3,7 @@ import { app, ipcMain, BrowserWindow } from 'electron'
 import {
   getColorHexRGB,
 
+  DARWIN_IS_PLATFORM_PRE_CATALINA,
   darwinGetScreenPermissionGranted,
   darwinRequestScreenPermissionPopup
 } from 'electron-color-picker'

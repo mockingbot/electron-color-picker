@@ -31,7 +31,7 @@ const getColorHexRGB = async () => {
   return colorHex
 }
 
-const darwinRunColorPicker = async () => {
+const darwinGetColorHexRGB = async () => {
   const { possibleColorString } = await mutexRunColorPicker(__darwinRunColorPicker)
   const [ colorHex ] = REGEXP_COLOR_HEX_RGB.exec(possibleColorString.toUpperCase()) || [ '' ]
   __DEV__ && console.log(`[electron-color-picker] get hex color: [${colorHex}] from: ${possibleColorString}`)
@@ -39,7 +39,7 @@ const darwinRunColorPicker = async () => {
 }
 
 const darwinGetScreenPermissionGranted = async () => {
-  const { isDarwinScreenPermissionGranted } = await mutexRunColorPicker(__darwinGetScreenPermissionGranted)
+  const isDarwinScreenPermissionGranted = await mutexRunColorPicker(__darwinGetScreenPermissionGranted)
   __DEV__ && console.log(`[electron-color-picker] isDarwinScreenPermissionGranted: ${isDarwinScreenPermissionGranted}`)
   return isDarwinScreenPermissionGranted
 }
@@ -54,7 +54,7 @@ export {
 
   // for more control and customized checks
   DARWIN_IS_PLATFORM_PRE_CATALINA, // darwin only, undefined on other platform
-  darwinRunColorPicker, // darwin only, throw error on other platform
+  darwinGetColorHexRGB, // darwin only, throw error on other platform
   darwinGetScreenPermissionGranted, // darwin only, throw error on other platform
   darwinRequestScreenPermissionPopup // darwin only, throw error on other platform
 }

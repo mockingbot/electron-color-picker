@@ -19,8 +19,9 @@ const darwinGetScreenPermissionGranted = DARWIN_IS_PLATFORM_PRE_CATALINA
   ? () => Promise.resolve(true)
   : () => new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, [ '--mode=1' ], (error, stdout, stderr) => {
     if (error) return reject(error)
-    __DEV__ && console.log('[darwinGetScreenPermissionGranted]', { stdout, stderr })
-    resolve({ isDarwinScreenPermissionGranted: stdout.includes('Permission Granted: YES') })
+    const isDarwinScreenPermissionGranted = stdout.includes('Permission Granted: YES')
+    __DEV__ && console.log('[darwinGetScreenPermissionGranted]', { stdout, stderr, isDarwinScreenPermissionGranted })
+    resolve(isDarwinScreenPermissionGranted)
   }))
 
 let mainBundleId

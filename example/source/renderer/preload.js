@@ -1,4 +1,6 @@
 import { ipcRenderer } from 'electron'
+import { release } from 'os'
+import { DARWIN_IS_PLATFORM_PRE_CATALINA } from 'electron-color-picker'
 
 // BrowserWindow.preload: Specifies a script that will be loaded before other scripts run in the page.
 
@@ -17,6 +19,12 @@ process.once('loaded', () => { // expose to renderer process
   })
 
   window.PRELOAD = {
+    SYSTEM_INFO: [
+      `arch: ${process.arch}`,
+      `platform: ${process.platform}`,
+      `release: ${release()}`,
+      `DARWIN_IS_PLATFORM_PRE_CATALINA: ${DARWIN_IS_PLATFORM_PRE_CATALINA}`
+    ].join('\n'),
     GET_COLOR_HEX_RGB: () => ipcPingPongAsync( // resolve to string hex color (#ffffff)
       'main:ipc-task:color-picker',
       'renderer:ipc-task:color-picker:result'

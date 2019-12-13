@@ -63,7 +63,7 @@ const {
 
   // for more control and customized checks
   DARWIN_IS_PLATFORM_PRE_CATALINA, // darwin only, undefined on other platform
-  darwinRunColorPicker, // darwin only, throw error on other platform
+  darwinGetColorHexRGB, // darwin only, throw error on other platform
   darwinGetScreenPermissionGranted, // darwin only, throw error on other platform
   darwinRequestScreenPermissionPopup // darwin only, throw error on other platform
 } = require('electron-color-picker')
@@ -89,7 +89,7 @@ if (process.platform === 'darwin' && !DARWIN_IS_PLATFORM_PRE_CATALINA) {
     }
 
     if (!isGranted) return console.warn('no permission granted')
-    const color = await darwinRunColorPicker().catch((error) => {
+    const color = await darwinGetColorHexRGB().catch((error) => {
       console.warn('[ERROR] getColor', error)
       return ''
     })
