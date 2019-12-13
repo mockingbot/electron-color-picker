@@ -2,9 +2,10 @@ import { join } from 'path'
 import { app, ipcMain, BrowserWindow } from 'electron'
 import {
   getColorHexRGB,
+
   darwinGetScreenPermissionGranted,
   darwinRequestScreenPermissionPopup
-} from './electronColorPicker'
+} from 'electron-color-picker'
 
 const PATH_HTML_FILE = join(__dirname, '../renderer/index.html')
 const PATH_PRELOAD = join(__dirname, '../renderer/preload.js')

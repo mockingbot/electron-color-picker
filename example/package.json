@@ -7,20 +7,22 @@
     "script-pack-0-source": "node -r @babel/register ./script/pack-0-source",
     "script-pack-0-source-dev": "node -r @babel/register ./script/pack-0-source dev",
     "script-pack-1-output": "node -r @babel/register ./script/pack-1-output",
-    "// build =======================": "",
-    "build-pack-0-source": "babel ./source --out-dir ./pack-0-source-gitignore --copy-files",
-    "build-pack-0-source-dev": "cross-env BABEL_ENV=dev npm run build-pack-0-source",
+    "// step ========================": "",
+    "step-pack-0-package-install": "cd ./pack-0-source-gitignore && npm install --no-package-lock",
+    "step-pack-0-build-source": "babel ./source --out-dir ./pack-0-source-gitignore --copy-files",
+    "step-pack-0-build-source-dev": "cross-env BABEL_ENV=dev npm run step-pack-0-build-source",
     "// =============================": "",
+    "install-cn-mirror": "ELECTRON_MIRROR=\"https://cdn.npm.taobao.org/dist/electron/\" npm install",
     "run-dev": "npm run script-pack-0-source-dev && electron ./pack-0-source-gitignore/main/index.js",
     "run-prod": "npm run script-pack-0-source && npm run script-pack-1-output && dr-js -o ./pack-1-output-gitignore"
   },
   "dependencies": {
-    "electron-color-picker": "0.2.0-dev.2"
+    "electron-color-picker": "0.2.0-dev.4"
   },
   "devDependencies": {
-    "@dr-js/core": "^0.1.1",
-    "@dr-js/dev": "^0.1.2",
-    "@dr-js/dev-babel": "^0.1.2",
+    "@dr-js/core": "0.2.0-dev.6",
+    "@dr-js/dev": "0.2.0-dev.1",
+    "@dr-js/dev-babel": "0.2.0-dev.1",
     "electron": "^7",
     "electron-packager": "^14"
   }

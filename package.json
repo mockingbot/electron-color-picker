@@ -1,7 +1,7 @@
 {
   "private": true,
   "name": "electron-color-picker",
-  "version": "0.2.0-dev.3",
+  "version": "0.2.0-dev.4",
   "description": "Pick color from Desktop, in Electron.",
   "author": "mockingbot",
   "license": "MIT",
@@ -21,7 +21,7 @@
     "build-library": "babel ./source --out-dir ./output-gitignore/library --copy-files",
     "build-library-dev": "cross-env BABEL_ENV=dev npm run build-library -- --watch",
     "// =============================": "",
-    "lint": "eslint --ignore-pattern \"node_modules\" --ignore-pattern \"*-gitignore\" ./source/ ./script/ ./example/",
+    "lint": "eslint ./source/ ./script/ ./example/source/ ./example/script/",
     "prepack": "echo \"Error: pack with script-*\" && exit 1"
   },
   "engines": {
@@ -31,7 +31,7 @@
     "electron": ">=1.8.1"
   },
   "devDependencies": {
-    "@dr-js/dev": "^0.1.2",
-    "@dr-js/dev-babel": "^0.1.2"
+    "@dr-js/dev": "0.2.0-dev.1",
+    "@dr-js/dev-babel": "0.2.0-dev.1"
   }
 }

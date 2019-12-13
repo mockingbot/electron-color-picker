@@ -6,33 +6,37 @@ import { getDarwinMainBundleIdHackAsync } from './darwinMainBundleIdHack' // hac
 
 const PATH_BINARY = join(__dirname, 'ColorPicker')
 
+// check: https://github.com/sindresorhus/macos-release/blob/master/index.js
+const DARWIN_IS_PLATFORM_PRE_CATALINA = Number(release().split('.')[ 0 ]) < 19 // less than 19.0.0 (macOS 10.15 Catalina)
+
 const darwinRunColorPicker = () => new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, (error, stdout, stderr) => {
   if (error) return reject(error)
   __DEV__ && console.log('[runColorPicker]', { stdout, stderr })
   resolve({ possibleColorString: stdout })
 }))
 
-const darwinGetScreenPermissionGranted = () => new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, [ '--mode=1' ], (error, stdout, stderr) => {
-  if (error) return reject(error)
-  __DEV__ && console.log('[darwinGetScreenPermissionGranted]', { stdout, stderr })
-  resolve({ isDarwinScreenPermissionGranted: stdout.includes('Permission Granted: YES') })
-}))
+const darwinGetScreenPermissionGranted = DARWIN_IS_PLATFORM_PRE_CATALINA
+  ? () => Promise.resolve(true)
+  : () => new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, [ '--mode=1' ], (error, stdout, stderr) => {
+    if (error) return reject(error)
+    __DEV__ && console.log('[darwinGetScreenPermissionGranted]', { stdout, stderr })
+    resolve({ isDarwinScreenPermissionGranted: stdout.includes('Permission Granted: YES') })
+  }))
 
 let mainBundleId
-const darwinRequestScreenPermissionPopup = async () => {
-  if (mainBundleId === undefined) mainBundleId = await getDarwinMainBundleIdHackAsync()
-  await new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, [ '--mode=2', `--bundle-id=${mainBundleId}` ], (error, stdout, stderr) => {
-    if (error) return reject(error)
-    __DEV__ && console.log('[darwinRequestScreenPermissionPopup]', { stdout, stderr })
-    resolve() // popup only, no permission result
-  }))
-}
-
-// check: https://github.com/sindresorhus/macos-release/blob/master/index.js
-const IS_MACOS_LOWER_THAN_CATALINA = Number(release().split('.')[ 0 ]) < 19
+const darwinRequestScreenPermissionPopup = DARWIN_IS_PLATFORM_PRE_CATALINA
+  ? () => Promise.resolve()
+  : async () => {
+    if (mainBundleId === undefined) mainBundleId = await getDarwinMainBundleIdHackAsync()
+    await new Promise((resolve, reject) => execFileFromAsar(PATH_BINARY, [ '--mode=2', `--bundle-id=${mainBundleId}` ], (error, stdout, stderr) => {
+      if (error) return reject(error)
+      __DEV__ && console.log('[darwinRequestScreenPermissionPopup]', { stdout, stderr })
+      resolve() // popup only, no permission result returned
+    }))
+  }
 
 let isPermissionGranted
-const runColorPicker = IS_MACOS_LOWER_THAN_CATALINA
+const runColorPicker = DARWIN_IS_PLATFORM_PRE_CATALINA
   ? darwinRunColorPicker
   : async () => {
     if (isPermissionGranted === undefined) isPermissionGranted = await darwinGetScreenPermissionGranted()
@@ -45,6 +49,7 @@ const runColorPicker = IS_MACOS_LOWER_THAN_CATALINA
   }
 
 export {
+  DARWIN_IS_PLATFORM_PRE_CATALINA,
   darwinRunColorPicker,
   darwinGetScreenPermissionGranted,
   darwinRequestScreenPermissionPopup,

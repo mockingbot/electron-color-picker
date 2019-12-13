@@ -1,40 +1,46 @@
 import { resolve } from 'path'
 import { execSync } from 'child_process'
+import { readFileSync, writeFileSync } from 'fs'
 
-import { modifyCopy, modifyDeleteForce } from '@dr-js/core/module/node/file/Modify'
+import { modifyDelete } from '@dr-js/core/module/node/file/Modify'
 
-import { getScriptFileListFromPathList } from '@dr-js/dev/module/node/file'
-import { runMain, argvFlag } from '@dr-js/dev/module/main'
+import { getScriptFileListFromPathList, resetDirectory } from '@dr-js/dev/module/node/file'
 import { getTerserOption, minifyFileListWithTerser } from '@dr-js/dev/module/minify'
+import { runMain, argvFlag } from '@dr-js/dev/module/main'
 
 const PATH_ROOT = resolve(__dirname, '..')
 const PATH_OUTPUT = resolve(__dirname, '../pack-0-source-gitignore')
 const fromRoot = (...args) => resolve(PATH_ROOT, ...args)
 const fromOutput = (...args) => resolve(PATH_OUTPUT, ...args)
-const execOptionRoot = { cwd: fromRoot(), stdio: 'inherit', shell: true }
+const execShell = (command) => execSync(command, { cwd: fromRoot(), stdio: 'inherit' })
 
 runMain(async (logger) => {
-  const { padLog } = logger
+  logger.padLog('reset output')
+  await resetDirectory(fromOutput())
 
-  padLog('reset output')
-  await modifyDeleteForce(fromOutput())
+  logger.padLog('copy & edit "package.json"')
+  const packageJSON = JSON.parse(String(readFileSync(fromRoot('package.json'))))
+  delete packageJSON[ 'scripts' ]
+  delete packageJSON[ 'devDependencies' ]
+  writeFileSync(fromOutput('package.json'), JSON.stringify(packageJSON))
 
-  if (!argvFlag('dev')) {
-    padLog('[PROD] babel source file to output, or just copy for test')
-    execSync('npm run build-pack-0-source', execOptionRoot)
+  logger.padLog('install package')
+  execShell('npm run step-pack-0-package-install')
 
-    padLog('[PROD] minify to for better reading')
-    await minifyFileListWithTerser({
-      fileList: await getScriptFileListFromPathList([ '' ], fromOutput),
-      option: getTerserOption({ isReadable: true }),
-      rootPath: PATH_OUTPUT,
-      logger
-    })
+  if (argvFlag('dev')) {
+    logger.padLog('[DEV] babel source file to output, or just copy for test')
+    execShell('npm run step-pack-0-build-source-dev')
   } else {
-    padLog('[DEV] babel source file to output, or just copy for test')
-    execSync('npm run build-pack-0-source-dev', execOptionRoot)
-  }
+    logger.padLog('[PROD] babel source file to output, or just copy for test')
+    execShell('npm run step-pack-0-build-source')
 
-  padLog('copy "package.json"')
-  await modifyCopy(fromRoot('package.json'), fromOutput('package.json'))
+    logger.padLog('[PROD] minify to for better reading')
+    const fileList = await getScriptFileListFromPathList([ '' ], fromOutput)
+    await minifyFileListWithTerser({ fileList, option: getTerserOption({ isReadable: true }), rootPath: PATH_OUTPUT, logger })
+
+    logger.padLog('[PROD] trim extra platform from "electron-color-picker" (OPTIONAL)') // Optional, to make output package smaller
+    process.platform !== 'win32' && await modifyDelete(fromOutput('node_modules/electron-color-picker/library/win32/'))
+    process.platform !== 'linux' && await modifyDelete(fromOutput('node_modules/electron-color-picker/library/linux/'))
+    process.platform !== 'darwin' && await modifyDelete(fromOutput('node_modules/electron-color-picker/library/darwin/'))
+  }
 }, 'pack-0-source')

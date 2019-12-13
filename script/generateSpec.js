@@ -12,7 +12,7 @@ const PATH_ROOT = resolve(__dirname, '..')
 const fromRoot = (...args) => resolve(PATH_ROOT, ...args)
 
 runMain(async (logger) => {
-  logger.log(`generate exportInfoMap`)
+  logger.padLog(`generate exportInfoMap`)
   const sourceRouteMap = await collectSourceRouteMap({
     pathRootList: [ fromRoot('source') ],
     pathInfoFilter: ({ name }) => name !== 'index.example.js',
@@ -34,4 +34,4 @@ runMain(async (logger) => {
     ),
     ''
   ].join('\n'))
-}, 'generate-export')
+}, 'generate-spec')

@@ -3,8 +3,7 @@ import { resolve } from 'path'
 import ElectronPackager from 'electron-packager'
 // import debug from 'debug'
 
-import { modifyCopy, modifyDelete, modifyDeleteForce } from '@dr-js/core/module/node/file/Modify'
-
+import { resetDirectory } from '@dr-js/dev/module/node/file'
 import { runMain } from '@dr-js/dev/module/main'
 
 const PATH_ROOT = resolve(__dirname, '..')
@@ -23,7 +22,7 @@ runMain(async (logger) => {
   const { padLog, log } = logger
 
   padLog('reset output')
-  await modifyDeleteForce(fromOutput())
+  await resetDirectory(fromOutput())
 
   padLog('build with "electron-packager" (may auto download electron)')
   // debug('electron-packager').enabled = true // debug.enable('*')
@@ -48,19 +47,4 @@ runMain(async (logger) => {
     }
   })
   log('electronPackagerOutputList:', electronPackagerOutputList)
-
-  const [ electronPackagerOutput ] = electronPackagerOutputList // only one output since this is single arch packing
-  const PATH_ELECTRON_COLOR_PICKER = fromRoot(electronPackagerOutput, process.platform !== 'darwin'
-    ? 'resources/electron-color-picker'
-    : `${APP_NAME}.app/Contents/Resources/electron-color-picker`
-  )
-
-  padLog('copy "electron-color-picker" to output')
-  await modifyCopy(fromRoot('node_modules/electron-color-picker/'), PATH_ELECTRON_COLOR_PICKER)
-  log('copied to:', PATH_ELECTRON_COLOR_PICKER)
-
-  padLog('trim extra platform from "electron-color-picker" (OPTIONAL)') // Optional, to make output package smaller
-  process.platform !== 'win32' && await modifyDelete(fromOutput(PATH_ELECTRON_COLOR_PICKER, 'library/win32/'))
-  process.platform !== 'linux' && await modifyDelete(fromOutput(PATH_ELECTRON_COLOR_PICKER, 'library/linux/'))
-  process.platform !== 'darwin' && await modifyDelete(fromOutput(PATH_ELECTRON_COLOR_PICKER, 'library/darwin/'))
 }, 'pack-1-output')

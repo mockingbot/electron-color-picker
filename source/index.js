@@ -3,6 +3,7 @@ const DEFAULT_UNSUPPORTED = () => { throw new Error(`[electron-color-picker] uns
 const {
   runColorPicker = DEFAULT_UNSUPPORTED,
 
+  DARWIN_IS_PLATFORM_PRE_CATALINA = undefined,
   darwinRunColorPicker: __darwinRunColorPicker = DEFAULT_UNSUPPORTED,
   darwinGetScreenPermissionGranted: __darwinGetScreenPermissionGranted = DEFAULT_UNSUPPORTED,
   darwinRequestScreenPermissionPopup: __darwinRequestScreenPermissionPopup = DEFAULT_UNSUPPORTED
@@ -51,6 +52,8 @@ const darwinRequestScreenPermissionPopup = async () => {
 export {
   getColorHexRGB,
 
+  // for more control and customized checks
+  DARWIN_IS_PLATFORM_PRE_CATALINA, // darwin only, undefined on other platform
   darwinRunColorPicker, // darwin only, throw error on other platform
   darwinGetScreenPermissionGranted, // darwin only, throw error on other platform
   darwinRequestScreenPermissionPopup // darwin only, throw error on other platform

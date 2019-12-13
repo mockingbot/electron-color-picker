@@ -1,12 +1,7 @@
 ## concept
 
 The idea of the example is to show a working Electron app project setup,
-with most of the code inside `app.asar`,
-but also can `require` and use `electron-color-picker`.
-
-A special delegate `require` file is needed:
-`example/source/main/electronColorPicker.js` to switch path between dev/prod mode,
-to access the correct `electron-color-picker` code.
+with all the code packed inside `app.asar`.
 
 This minimal setup is extracted from our app build script.
 It should allow:
@@ -20,16 +15,19 @@ And will put output file to 2 extra folder:
 For develop, the step is like: (`npm run run-dev`)
 - `npm run script-pack-0-source-dev`:
   - delete & recreate to reset `./pack-0-source-gitignore/` content
-  - build code & output to: `./pack-0-source-gitignore/` (`npm run build-pack-0-source-dev`)
+  - copy & edit `package.json` to `./pack-0-source-gitignore/`
+  - run npm install in: `./pack-0-source-gitignore/` (`npm run step-pack-0-package-install`)
+  - build code & output to: `./pack-0-source-gitignore/` (`npm run step-pack-0-build-source-dev`)
 - run code with `electron ./pack-0-source-gitignore/main/index.js`
 
 For Production/Release, the step is like: (`npm run run-prod`)
 - `npm run script-pack-0-source`:
   - delete & recreate to reset `./pack-0-source-gitignore/` content
-  - build code & output to: `./pack-0-source-gitignore/` (`npm run build-pack-0-source`)
+  - copy & edit `package.json` to `./pack-0-source-gitignore/`
+  - run npm install in: `./pack-0-source-gitignore/` (`npm run step-pack-0-package-install`)
+  - build code & output to: `./pack-0-source-gitignore/` (`npm run step-pack-0-build-source`)
   - better optimize output file with code minify & remove unused file
+  - optionally delete unused platform code from copied `electron-color-picker`
 - `npm run script-pack-1-output`:
   - delete & recreate to reset `./pack-1-output-gitignore/` content
   - pack with `electron-packager` and output to `./pack-1-output-gitignore/`
-  - copy `electron-color-picker` from `node_modules`, and put under output `resources/` folder
-  - optionally delete unused platform code from copied `electron-color-picker`

@@ -58,70 +58,46 @@ npm install electron-color-picker
 Sample function `saveColorToClipboard()`:
 ```js
 const { clipboard } = require('electron')
-const { getColorHexRGB } = require('electron-color-picker') // TODO: NOTE: this can not be directly packed for release, check below
+const {
+  getColorHexRGB,
+
+  // for more control and customized checks
+  DARWIN_IS_PLATFORM_PRE_CATALINA, // darwin only, undefined on other platform
+  darwinRunColorPicker, // darwin only, throw error on other platform
+  darwinGetScreenPermissionGranted, // darwin only, throw error on other platform
+  darwinRequestScreenPermissionPopup // darwin only, throw error on other platform
+} = require('electron-color-picker')
 
 const saveColorToClipboard = async () => {
-  // color may be `#0099ff` or `` (pick cancelled with ESC)
+  // color may be '#0099ff' or '' (pick cancelled with ESC)
   const color = await getColorHexRGB().catch((error) => {
-    console.warn(`[ERROR] getColor`, error)
+    console.warn('[ERROR] getColor', error)
     return ''
   })
-
   console.log(`getColor: ${color}`)
   color && clipboard.writeText(color)
 }
 
-const darwinScreenPermissionSample = async () => { // darwin only, throw error on other platform (since electron-color-picker@2)
-  const { darwinGetScreenPermissionGranted, darwinRequestScreenPermissionPopup } = require('electron-color-picker')
+if (process.platform === 'darwin' && !DARWIN_IS_PLATFORM_PRE_CATALINA) {
+  const darwinScreenPermissionSample = async () => {
+    let isGranted = await darwinGetScreenPermissionGranted() // initial check
+    console.log('darwinGetScreenPermissionGranted:', isGranted)
 
-  // initial check
-  const isGranted = await darwinGetScreenPermissionGranted()
-  console.log('darwinGetScreenPermissionGranted:', isGranted)
+    if (!isGranted) { // request user for permission
+      isGranted = await darwinRequestScreenPermissionPopup()
+      console.log('darwinRequestScreenPermissionPopup:', isGranted)
+    }
 
-  if (!isGranted) { // request user for permission
-    const isGranted = await darwinRequestScreenPermissionPopup()
-    console.log('darwinRequestScreenPermissionPopup:', isGranted)
+    if (!isGranted) return console.warn('no permission granted')
+    const color = await darwinRunColorPicker().catch((error) => {
+      console.warn('[ERROR] getColor', error)
+      return ''
+    })
+    console.log(`getColor: ${color}`)
+    color && clipboard.writeText(color)
   }
 }
 ```
-
-
-## About release packaging
-
-To use this package in released Electron app,
-some custom repack steps is required.
-(mainly for platform darwin (OSX), since the binary has external resource file)
-
-Most Electron app use `electron-packager`,
-and generate a output directory structure like:
-```
-./
-  resources/
-    app.asar # this should be your packed js code & other resource
-    electron.asar
-  locales/
-  swiftshader/
-  resources.pak
-  chrome_100_percent.pak
-  ...
-```
-
-- One option is to set option `asar: false` for `electron-packager`,
-  and all file `resources/app.asar` will be unpacked into `resources/app/`
-
-- Another option is to use script to create a output directory structure like:
-  ```
-  ./
-    resources/
-      electron-color-picker/ # copy from `node_modules`
-        ...
-      app.asar
-      electron.asar
-    ...
-  ```
-  And in JS code, require from path like:
-  `const { getColorHexRGB } = require('../electron-color-picker')`
-  Check `example/` for this implementation.
 
 
 [l:scrot]: https://en.wikipedia.org/wiki/Scrot
