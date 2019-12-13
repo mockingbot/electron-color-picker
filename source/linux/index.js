@@ -1,6 +1,6 @@
 import { readFileSync, unlinkSync } from 'fs'
-import { format as formatUrl } from 'url'
-import { join as joinPath } from 'path'
+import { join } from 'path'
+import { format } from 'url'
 import { exec } from 'child_process'
 import { promisify } from 'util'
 
@@ -10,8 +10,8 @@ import { runLinuxSCROT } from './linux-scrot'
 
 const execAsync = promisify(exec)
 
-const formatFileUrl = (...args) => formatUrl({
-  pathname: joinPath(...args),
+const formatFileUrl = (...args) => format({
+  pathname: join(...args),
   protocol: 'file',
   slashes: true
 })
@@ -26,7 +26,7 @@ const tryCreateScreenshotFile = async (tempOutputFile) => {
 const createDataUrlFromBuffer = (buffer, MIME) => `data:${MIME};base64,${buffer.toString('base64')}`
 const loadImageFileAsDataUrl = (imagePath, MIME = 'image/png') => createDataUrlFromBuffer(readFileSync(imagePath), MIME)
 const getScreenshotDataUrl = async () => {
-  const tempOutputFile = joinPath(app.getPath('temp'), 'temp-screenshot.png')
+  const tempOutputFile = join(app.getPath('temp'), 'temp-screenshot.png')
 
   await tryCreateScreenshotFile(tempOutputFile)
 

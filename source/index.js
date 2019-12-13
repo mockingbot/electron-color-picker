@@ -1,10 +1,11 @@
-const DEFAULT_RUN_COLOR_PICKER = () => { throw new Error(`[electron-color-picker] unsupported ${process.platform}-${process.arch}`) }
-const DEFAULT_NO_FUNC = () => { throw new Error(`[electron-color-picker] no func for ${process.platform}-${process.arch}`) }
+const DEFAULT_UNSUPPORTED = () => { throw new Error(`[electron-color-picker] unsupported ${process.platform}-${process.arch}`) }
 
 const {
-  runColorPicker = DEFAULT_RUN_COLOR_PICKER,
-  getDarwinScreenPermissionGranted = DEFAULT_NO_FUNC, // darwin only, throw error on other platform
-  requestDarwinScreenPermissionPopup = DEFAULT_NO_FUNC // darwin only, throw error on other platform
+  runColorPicker = DEFAULT_UNSUPPORTED,
+
+  darwinRunColorPicker: __darwinRunColorPicker = DEFAULT_UNSUPPORTED,
+  darwinGetScreenPermissionGranted: __darwinGetScreenPermissionGranted = DEFAULT_UNSUPPORTED,
+  darwinRequestScreenPermissionPopup: __darwinRequestScreenPermissionPopup = DEFAULT_UNSUPPORTED
 } = (() => {
   try {
     return require(`./${process.platform}`) // TODO: NOTE: this is a `dynamic` require
@@ -29,19 +30,28 @@ const getColorHexRGB = async () => {
   return colorHex
 }
 
+const darwinRunColorPicker = async () => {
+  const { possibleColorString } = await mutexRunColorPicker(__darwinRunColorPicker)
+  const [ colorHex ] = REGEXP_COLOR_HEX_RGB.exec(possibleColorString.toUpperCase()) || [ '' ]
+  __DEV__ && console.log(`[electron-color-picker] get hex color: [${colorHex}] from: ${possibleColorString}`)
+  return colorHex
+}
+
 const darwinGetScreenPermissionGranted = async () => {
-  const { isDarwinScreenPermissionGranted } = await mutexRunColorPicker(getDarwinScreenPermissionGranted)
+  const { isDarwinScreenPermissionGranted } = await mutexRunColorPicker(__darwinGetScreenPermissionGranted)
   __DEV__ && console.log(`[electron-color-picker] isDarwinScreenPermissionGranted: ${isDarwinScreenPermissionGranted}`)
   return isDarwinScreenPermissionGranted
 }
 
 const darwinRequestScreenPermissionPopup = async () => {
-  await mutexRunColorPicker(requestDarwinScreenPermissionPopup)
-  return getDarwinScreenPermissionGranted() // get and return result
+  await mutexRunColorPicker(__darwinRequestScreenPermissionPopup)
+  return darwinGetScreenPermissionGranted() // get and return result
 }
 
 export {
   getColorHexRGB,
+
+  darwinRunColorPicker, // darwin only, throw error on other platform
   darwinGetScreenPermissionGranted, // darwin only, throw error on other platform
   darwinRequestScreenPermissionPopup // darwin only, throw error on other platform
 }
