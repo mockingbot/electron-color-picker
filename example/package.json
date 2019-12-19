@@ -17,12 +17,12 @@
     "run-prod": "npm run script-pack-0-source && npm run script-pack-1-output && dr-js -o ./pack-1-output-gitignore"
   },
   "dependencies": {
-    "electron-color-picker": "0.2.0-dev.7"
+    "electron-color-picker": "^0.2.0"
   },
   "devDependencies": {
-    "@dr-js/core": "0.2.0-dev.6",
-    "@dr-js/dev": "0.2.0-dev.1",
-    "@dr-js/dev-babel": "0.2.0-dev.1",
+    "@dr-js/core": "^0.2.0",
+    "@dr-js/dev": "^0.2.1",
+    "@dr-js/dev-babel": "^0.2.0",
     "electron": "^7",
     "electron-packager": "^14"
   }

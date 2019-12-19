@@ -16,7 +16,7 @@ const execShell = (command) => execSync(command, { cwd: fromRoot(), stdio: argvF
 const buildOutput = async ({ logger }) => {
   logger.padLog('generate spec doc')
   execShell('npm run script-generate-spec')
-  logger.padLog('build output')
+  logger.padLog('build library')
   execShell('npm run build-library')
 }
 
